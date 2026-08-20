@@ -1,10 +1,11 @@
-import { createBrowserRouter, Navigate } from "react-router-dom"
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
-import App from "../App"
-import Home from "../pages/Home"
-import Database from "../pages/Database"
-import Archetypes from "../pages/Archetypes"
-import Sets from "../pages/Sets"
+import App from "../App";
+import Home from "../pages/Home";
+import Database from "../pages/Database";
+import Archetypes from "../pages/Archetypes";
+import Sets from "../pages/Sets";
+import ArchetypeDetail from "../pages/ArchetypeDetail";
 
 const router = createBrowserRouter([
   {
@@ -31,8 +32,12 @@ const router = createBrowserRouter([
         path: "sets",
         element: <Sets />,
       },
+      {
+        path: "archetypes/:archetypeName",
+        element: <ArchetypeDetail />,
+      },
     ],
   },
-])
+]);
 
-export default router
+export default router;

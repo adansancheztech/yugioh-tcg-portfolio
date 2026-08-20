@@ -71,3 +71,37 @@ body {
 
   z-index: 1;
 }
+
+
+/* ========================================
+   ARQUETIPO - GALERÍA DE CARTAS
+   ======================================== */
+
+.archetype-grid {
+  display: grid;
+
+  /* 8 cartas por fila */
+  grid-template-columns: repeat(8, 1fr);
+
+  gap: 16px;
+}
+
+
+/* Tablet */
+@media (max-width: 1200px) {
+
+  .archetype-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+}
+
+
+/* Móvil */
+@media (max-width: 600px) {
+
+  .archetype-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
