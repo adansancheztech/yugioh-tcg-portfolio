@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  color: white;
+
+  /* Fondo negro/gris con aspecto metálico */
+  background:
+    linear-gradient(
+      135deg,
+      #111111 0%,
+      #292929 35%,
+      #4b4b4b 50%,
+      #252525 65%,
+      #101010 100%
+    );
+
+  background-attachment: fixed;
+
+
+  
+}
+
+.home-hero {
+  min-height: calc(100vh - 56px);
+  overflow: hidden;
+}
+
+.home-hero-content {
+  min-height: calc(100vh - 56px);
+}
+
+/* Zona donde colocamos los 3 renders */
+.home-characters {
+  position: relative;
+  height: 760px;
+}
+
+/* Regla común */
+.character {
+  position: absolute;
+  object-fit: contain;
+}
+
+/* Yami: protagonista */
+.character-yami {
+  height: 600px;
+
+  left: 40px;
+  bottom: 0;
+
+  z-index: 3;
+}
+
+/* Yusei: más pequeño y separado arriba/derecha */
+.character-yusei {
+  height: 520px;
+
+  right: -100px;
+  bottom: 10px;
+
+  z-index: 2;
+}
+
+/* Lilith: apoyo visual abajo/izquierda */
+.character-lilith {
+  height: 430px;
+
+  left: -140px;
+  bottom: 10px;
+
+  z-index: 1;
+}
