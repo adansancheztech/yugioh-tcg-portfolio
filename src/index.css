@@ -105,3 +105,34 @@ body {
   }
 
 }
+
+/* ========================================
+   EFECTO HOVER DE LAS CARTAS
+   ======================================== */
+
+.yugioh-card {
+  border-radius: 8px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  cursor: pointer;
+}
+
+
+/* Cuando el ratón pasa sobre una carta */
+.yugioh-card:hover {
+
+  /* Aumentamos ligeramente la carta */
+  transform: scale(1.04);
+
+  /* Brillo amarillo/dorado suave */
+  box-shadow:
+    0 0 8px rgba(255, 193, 7, 0.55),
+    0 0 18px rgba(255, 193, 7, 0.25);
+
+  /* Hace que la carta ampliada quede
+     por encima de las cartas vecinas */
+  position: relative;
+  z-index: 10;
+}

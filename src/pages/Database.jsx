@@ -1,65 +1,62 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
-import { getCards } from "../services/yugiohApi";
-import Card from "../components/Card";
+import { getCards } from "../services/yugiohApi"
+import Card from "../components/Card"
 
 function Database() {
-  // Guarda las cartas recibidas desde la API.
-  // Al principio está vacío hasta que llega la respuesta.
-  const [cards, setCards] = useState([]);
 
-  // Guarda la página actual.
-  //
-  // Página 1 → cartas 1-24
-  // Página 2 → cartas 25-48
-  // Página 3 → cartas 49-72
-  // Página 4 → cartas 73-96
-  const [currentPage, setCurrentPage] = useState(1);
+  // Cartas de la página actual
+  const [cards, setCards] = useState([])
 
-  // Guarda el tipo de vista seleccionado.
-  //
-  // "grid" = vista en cuadros
-  // "list" = vista en lista
-  const [viewMode, setViewMode] = useState("grid");
+  // Página actual
+  const [currentPage, setCurrentPage] = useState(1)
 
-  // useEffect se ejecuta:
-  // 1. cuando Database aparece por primera vez
-  // 2. cada vez que cambia currentPage
+  // Número total de páginas de la API
+  const [totalPages, setTotalPages] = useState(1)
+
+  // Vista grid / list
+  const [viewMode, setViewMode] = useState("grid")
+
+
   useEffect(() => {
-    // Función interna que carga las cartas.
-    async function loadCards() {
-      try {
-        // Le pasamos a getCards la página actual.
-        //
-        // Ejemplo:
-        // currentPage = 1 → getCards(1)
-        // currentPage = 2 → getCards(2)
-        const data = await getCards(currentPage);
-        console.log(data[0]);
 
-        // Guardamos las cartas recibidas en el estado.
-        setCards(data);
+    async function loadCards() {
+
+      try {
+
+        const result = await getCards(currentPage)
+
+        // IMPORTANTE:
+        // result.cards, no result.card
+        setCards(result.cards)
+
+        // La propia API ya nos da el total de páginas.
+        setTotalPages(result.meta.total_pages)
+
       } catch (error) {
-        // Si algo falla en la API lo vemos en consola.
-        console.error("Error cargando cartas:", error);
+
+        console.error("Error cargando cartas:", error)
+
       }
+
     }
 
-    loadCards();
-  }, [currentPage]);
+    loadCards()
+
+  }, [currentPage])
+
 
   return (
     <div className="container py-4">
-      {/* ==============================
-          CABECERA
-          ============================== */}
 
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="mb-0">Card Database</h1>
 
-        {/* Botones para cambiar la vista */}
+        <h1 className="mb-0">
+          Card Database
+        </h1>
+
         <div className="d-flex gap-2">
-          {/* Vista en cuadros */}
+
           <button
             className="btn btn-outline-light"
             onClick={() => setViewMode("grid")}
@@ -68,7 +65,6 @@ function Database() {
             ▦
           </button>
 
-          {/* Vista en lista */}
           <button
             className="btn btn-outline-light"
             onClick={() => setViewMode("list")}
@@ -76,142 +72,153 @@ function Database() {
           >
             ☰
           </button>
+
         </div>
+
       </div>
 
-      {/* ==============================
-          CONTENIDO
-          ============================== */}
-
-      {/* 
-        Operador ternario:
-
-        si viewMode === "grid"
-              ↓
-        mostramos la cuadrícula
-
-        si no
-              ↓
-        mostramos la lista
-      */}
 
       {viewMode === "grid" ? (
-        // ==============================
-        // VISTA CUADRÍCULA
-        // ==============================
 
         <div className="row g-4">
-          {cards.map((card) => (
-            <div className="col-6 col-md-4 col-lg-3" key={card.id}>
-              {/* 
-                Card recibe una carta individual.
 
-                En nuestra vista grid,
-                Card muestra solamente la imagen.
-              */}
+          {cards.map((card) => (
+
+            <div
+              className="col-6 col-md-4 col-lg-3"
+              key={card.id}
+            >
               <Card card={card} />
             </div>
+
           ))}
+
         </div>
+
       ) : (
-        // ==============================
-        // VISTA LISTA
-        // ==============================
 
         <div className="d-flex flex-column gap-4">
+
           {cards.map((card) => (
-            <div className="row align-items-start" key={card.id}>
-              {/* Imagen pequeña de la carta */}
+
+            <div
+              className="row align-items-start"
+              key={card.id}
+            >
+
               <div className="col-md-3 col-lg-2">
+
                 <img
                   src={card.card_images[0].image_url}
                   className="img-fluid rounded"
                   alt={card.name}
                 />
+
               </div>
 
-              {/* Información de la carta */}
+
               <div className="col-md-9 col-lg-10">
-                {/* Nombre */}
-                <h2>{card.name}</h2>
 
-                {/* 
-  Información rápida de la carta.
+                <h2>
+                  {card.name}
+                </h2>
 
-  Los pequeños iconos permiten identificar
-  visualmente cada dato sin tener que leerlo todo.
-*/}
+
                 <div className="d-flex flex-wrap gap-4 mb-3">
-                  {/* Tipo de carta */}
-                  <span>🃏 {card.type}</span>
 
-                  {/* Raza / subtipo */}
-                  <span>◉ {card.race}</span>
+                  <span>
+                    🃏 {card.type}
+                  </span>
 
-                  {/* Fecha de lanzamiento TCG */}
-                  {/* 
-  misc_info es un array.
-  La información adicional de la carta está
-  normalmente en la primera posición [0].
-*/}
+                  <span>
+                    ◉ {card.race}
+                  </span>
+
                   {card.misc_info?.[0]?.tcg_date && (
-                    <span>📅 TCG: {card.misc_info[0].tcg_date}</span>
+                    <span>
+                      📅 TCG: {card.misc_info[0].tcg_date}
+                    </span>
                   )}
 
                   {card.misc_info?.[0]?.ocg_date && (
-                    <span>📅 OCG: {card.misc_info[0].ocg_date}</span>
+                    <span>
+                      📅 OCG: {card.misc_info[0].ocg_date}
+                    </span>
                   )}
+
                 </div>
 
-                {/* Descripción / efecto de la carta */}
-                <p>{card.desc}</p>
+
+                <p>
+                  {card.desc}
+                </p>
+
               </div>
+
             </div>
+
           ))}
+
         </div>
+
       )}
 
-      {/* ==============================
-          PAGINACIÓN
-          ============================== */}
 
+      {/* PAGINACIÓN DINÁMICA */}
       <nav className="mt-5">
+
         <ul className="pagination justify-content-center">
-          {/* 
-            Creamos automáticamente:
 
-            1
-            2
-            3
-            4
-          */}
-          {[1, 2, 3, 4].map((page) => (
-            <li
-              key={page}
-              className={`page-item ${currentPage === page ? "active" : ""}`}
+          <li
+            className={`page-item ${
+              currentPage === 1 ? "disabled" : ""
+            }`}
+          >
+
+            <button
+              className="page-link"
+              onClick={() =>
+                setCurrentPage(currentPage - 1)
+              }
             >
-              {/* 
-                Cuando pulsamos una página:
+              Anterior
+            </button>
 
-                setCurrentPage(page)
+          </li>
 
-                cambia currentPage.
 
-                Como useEffect depende de currentPage,
-                vuelve a pedir las cartas a la API.
-              */}
-              <button
-                className="page-link"
-                onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </button>
-            </li>
-          ))}
+          <li className="page-item disabled">
+
+            <span className="page-link">
+              Página {currentPage} de {totalPages}
+            </span>
+
+          </li>
+
+
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? "disabled" : ""
+            }`}
+          >
+
+            <button
+              className="page-link"
+              onClick={() =>
+                setCurrentPage(currentPage + 1)
+              }
+            >
+              Siguiente
+            </button>
+
+          </li>
+
         </ul>
+
       </nav>
+
     </div>
-  );
+  )
 }
 
-export default Database;
+export default Database

@@ -1,21 +1,33 @@
+import { Link } from "react-router-dom"
+
+
 function Card({ card }) {
   return (
-    <div className="h-100">
 
-      {/* 
-        Vista en cuadros:
-        mostramos únicamente la imagen completa de la carta.
+    // Toda la carta se convierte en un enlace.
+    //
+    // Ejemplo:
+    // card.id = 38033121
+    //        ↓
+    // /cards/38033121
+    <Link
+      to={`/cards/${card.id}`}
+      className="text-decoration-none"
+    >
 
-        No añadimos nombre, tipo ni descripción porque
-        esa información ya aparece físicamente en la carta.
-      */}
-      <img
-        src={card.card_images[0].image_url}
-        className="img-fluid rounded"
-        alt={card.name}
-      />
+      <div className="h-100 yugioh-card">
 
-    </div>
+        {/* Imagen completa de la carta */}
+        <img
+          src={card.card_images[0].image_url}
+          className="img-fluid rounded"
+          alt={card.name}
+        />
+
+      </div>
+
+    </Link>
+
   )
 }
 

@@ -6,6 +6,7 @@ import Database from "../pages/Database";
 import Archetypes from "../pages/Archetypes";
 import Sets from "../pages/Sets";
 import ArchetypeDetail from "../pages/ArchetypeDetail";
+import CardDetail from "../pages/CardDetail";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "database",
         element: <Database />,
+      },
+      {
+        path: "cards/:cardId",
+        element: <CardDetail />,
       },
       {
         path: "archetypes",

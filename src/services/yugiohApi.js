@@ -2,18 +2,14 @@
 const CARDS_PER_PAGE = 24
 
 
-// Esta función recibe el número de página actual.
+// Esta función recibe la página actual.
 //
-// Su trabajo es:
-// 1. Calcular desde qué carta debe empezar.
-// 2. Consultar YGOPRODeck.
-// 3. Devolver las cartas de esa página.
+// Devuelve:
+// - data: las 24 cartas de esa página
+// - meta: información de paginación de la API
 export async function getCards(page = 1) {
 
-  // Página 1 → (1 - 1) * 24 = 0
-  // Página 2 → (2 - 1) * 24 = 24
-  // Página 3 → (3 - 1) * 24 = 48
-  // Página 4 → (4 - 1) * 24 = 72
+  // Calculamos desde qué carta empieza la página.
   const offset = (page - 1) * CARDS_PER_PAGE
 
   const url =
@@ -27,7 +23,11 @@ export async function getCards(page = 1) {
 
   const json = await response.json()
 
-  return json.data
+  // Ahora devolvemos la respuesta completa que necesitamos.
+  return {
+    cards: json.data,
+    meta: json.meta
+  }
 }
 
 // Obtiene todos los arquetipos disponibles
@@ -72,4 +72,26 @@ export async function getCardsByArchetype(archetypeName) {
 
   // cardinfo devuelve las cartas dentro de data.
   return json.data
+}
+
+// Obtiene una carta concreta usando su ID.
+//
+// Ejemplo:
+// getCardById(38033121)
+export async function getCardById(cardId) {
+
+  const url =
+    `https://db.ygoprodeck.com/api/v7/cardinfo.php?id=${cardId}&misc=yes`
+
+  const response = await fetch(url)
+
+  if (!response.ok) {
+    throw new Error("Error al obtener el detalle de la carta")
+  }
+
+  const json = await response.json()
+
+  // La API devuelve un array dentro de data.
+  // Como buscamos un único ID, usamos la primera posición.
+  return json.data[0]
 }
